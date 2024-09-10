@@ -1,0 +1,28 @@
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+*.iws
+out/
+target/
+
+# NetBeans specific files
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# General Java specific files
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.hprof
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
