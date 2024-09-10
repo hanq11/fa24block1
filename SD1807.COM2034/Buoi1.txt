@@ -1,0 +1,70 @@
+CREATE DATABASE LuyenTapBuoi1;
+USE LuyenTapBuoi1;
+
+-- Cac kieu du lieu
+-- varchar(10) - Chuoi toi da 10 ky tu
+-- int - so nguyen
+-- float - so thuc
+-- nvarchar(10) - chuoi tieng viet 10 ky tu
+-- date - nam-thang-ngay
+-- PRIMARY KEY - Khoa chinh
+-- FOREIGN KEY - Khoa ngoai - FOREIGN KEY(id) REFERENCES Bang(cot)
+-- NOT NULL - Khong duoc trong
+-- IDENTITY(1,1) - khoa chinh tu tang
+-- ALTER TABLE - Them, sua, xoa cot
+-- WHERE -- =, >, <, >=, <=, !=
+-- ORDER BY -- ASC -- ascending -- Tang dan
+			-- DESC -- descending -- Giam dan
+-- GROUP BY -- Nhom
+-- HAVING -- Loc ban ghi cua GROUP BY
+		  -- SUM() -- Tinh tong
+		  -- AVG() -- Tinh trung binh
+		  -- MAX(), MIN() -- lon nhat be nhat
+-- INNER JOIN -- Noi trong
+-- LEFT JOIN -- Noi trai
+-- RIGHT JOIN -- Noi phai
+-- FULL OUTER JOIN -- Noi toan bo
+-- INSERT -- them ban ghi vao bang
+-- DELETE -- xoa ban ghi
+-- UPDATE -- cap nhat ban ghi
+-- DROP TABLE, DROP DATABASE, DROP COLUMN
+
+-- Tao bang hoc_sinh
+-- id -- int tu sinh, tu tang 1 don vi
+-- ma -- 10 ky tu
+-- ten -- 50 ky tu, ghi duoc tieng viet
+-- tuoi -- int
+-- diem_toan -- float 
+-- diem_ta -- float
+-- ngay_sinh -- date
+-- dia_chi -- 50 ky tu
+CREATE TABLE hoc_sinh(
+	id int IDENTITY(1,1) PRIMARY KEY,
+	ma varchar(10) NOT NULL,
+	ten nvarchar(50),
+	tuoi int,
+	diem_toan float,
+	diem_ta float,
+	ngay_sinh date,
+	dia_chi varchar(50)
+)
+SELECT * FROM hoc_sinh;
+-- Them 3 ban ghi vao bang hoc_sinh
+INSERT INTO hoc_sinh
+VALUES 
+	('HS01', 'Nguyen Van A', 10, 5.6, 4.2, '2000-02-03', 'Ha Noi'),
+	('HS02', 'Nguyen Van B', 4, 8.6, 8.2, '2000-02-03', 'Hai Phong'),
+	('HS03', 'Nguyen Van C', 9, 3.6, 2.2, '2000-02-03', 'Quang Ninh');
+-- Lay ra ban ghi cua cac hoc_sinh co tuoi > 5
+SELECT * FROM hoc_sinh WHERE tuoi > 5;
+-- Sap xep cac hoc_sinh theo diem_toan giam dan
+SELECT * FROM hoc_sinh
+ORDER BY diem_toan DESC;
+-- Lay ra cac hoc_sinh co dia_chi tai Ha Noi
+SELECT * FROM hoc_sinh
+WHERE dia_chi = 'Ha Noi';
+-- Lay ra cac hoc_sinh co ten chua' chu Van
+SELECT * FROM hoc_sinh
+WHERE ten LIKE '%Van%';
+-- Lay ra tong diem_toan cua cac hoc_sinh
+SELECT SUM(diem_toan) FROM hoc_sinh;
