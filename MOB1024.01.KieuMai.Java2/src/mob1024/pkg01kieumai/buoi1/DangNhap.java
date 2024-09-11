@@ -37,6 +37,7 @@ public class DangNhap extends javax.swing.JFrame {
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
         btnLogin = new javax.swing.JButton();
+        chkRememberMe = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -52,6 +53,8 @@ public class DangNhap extends javax.swing.JFrame {
                 btnLoginActionPerformed(evt);
             }
         });
+
+        chkRememberMe.setText("Remember me");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -73,7 +76,9 @@ public class DangNhap extends javax.swing.JFrame {
                         .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(161, 161, 161)
-                        .addComponent(btnLogin)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkRememberMe)
+                            .addComponent(btnLogin))))
                 .addContainerGap(84, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
@@ -92,7 +97,9 @@ public class DangNhap extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPassword)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkRememberMe)
+                .addGap(2, 2, 2)
                 .addComponent(btnLogin)
                 .addContainerGap(77, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,6 +121,9 @@ public class DangNhap extends javax.swing.JFrame {
         }
         if(username.equals("hanq11") && password.equals("123")) {
             JOptionPane.showMessageDialog(this, "dang nhap thanh cong");
+            if(chkRememberMe.isSelected()) {
+                JOptionPane.showMessageDialog(this, "da ghi nho");
+            }
         } else {
             JOptionPane.showMessageDialog(this, "dang nhap that bai");
         }
@@ -156,6 +166,7 @@ public class DangNhap extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
+    private javax.swing.JCheckBox chkRememberMe;
     private javax.swing.JLabel lblDangNhap;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
