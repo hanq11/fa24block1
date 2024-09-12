@@ -1,0 +1,65 @@
+CREATE DATABASE LuyenTapBuoi2;
+--Bôi đen rồi ấn  Ctrl + E hoặc F5 hoặc Execute
+USE LuyenTapBuoi2;
+
+-- Tao bang lop
+CREATE TABLE lop(
+	id int IDENTITY(1,1) PRIMARY KEY,
+	ma_lop varchar(10),
+	ten_lop varchar(10)
+)
+SELECT * FROM lop;
+-- Khóa chính, để đảm bảo rằng không bản ghi nào có trùng giá trị của khóa chính
+
+-- Tao bang hoc_sinh
+CREATE TABLE hoc_sinh(
+	id int IDENTITY(1,1) PRIMARY KEY,
+	ma_hoc_sinh varchar(10),
+	ten_hoc_sinh nvarchar(100),
+	diem float,
+	dia_chi nvarchar(150),
+	ngay_sinh date,
+	id_lop int,
+	FOREIGN KEY(id_lop) REFERENCES lop(id)
+)
+
+INSERT INTO lop 
+	(ma_lop, ten_lop)
+VALUES
+	('SD1801', 'Java 2'),
+	('SD1802', 'COM2034'),
+	('SD1803', 'Java 3');
+
+INSERT INTO hoc_sinh
+	(ma_hoc_sinh, ten_hoc_sinh, diem, dia_chi, ngay_sinh, id_lop)
+VALUES
+	('TH1', 'Nguyen Van B', 5.6, N'Hà Nội', '2007-04-06', 7),
+	('TH2', 'Nguyen Thi C', 9.6, N'Quảng Ninh', '2007-10-06', 5),
+	('TH3', 'Tran Van E', 7.6, N'Hải Phòng', '2007-04-10', 3);
+SELECT * FROM hoc_sinh;
+SELECT * FROM lop;
+
+-- Them cot truong_hoc varchar(10) vao bang lop
+ALTER TABLE lop
+ADD truong_hoc varchar(10);
+-- Xoa cot truong_hoc tai bang lop
+ALTER TABLE lop
+DROP COLUMN truong_hoc;
+-- Liet ke ten_hoc_sinh va ten_lop cua cac hoc sinh
+SELECT hs.ten_hoc_sinh, l.ten_lop FROM hoc_sinh hs
+INNER JOIN lop l ON hs.id_lop = l.id
+-- Liet ke ten_hoc_sinh va ten_lop cua cac hoc sinh co diem > 7, sap xep theo diem giam dan
+SELECT hs.ten_hoc_sinh, l.ten_lop, hs.diem FROM hoc_sinh hs
+INNER JOIN lop l ON hs.id_lop = l.id
+WHERE hs.diem > 7
+ORDER BY hs.diem DESC
+-- Liet ke cac hoc sinh co ngay sinh tu thang 3 den thang 7
+SELECT * FROM hoc_sinh
+WHERE month(ngay_sinh) >= 3 AND month(ngay_sinh) <= 7;
+-- Liet ke hoc sinh co diem cao nhat
+SELECT TOP 1 * FROM hoc_sinh
+ORDER BY diem DESC;
+-- Liet ke hoc sinh co ma_lop chứa số 01
+SELECT hs.ten_hoc_sinh, l.ma_lop FROM hoc_sinh hs
+INNER JOIN lop l ON hs.id_lop = l.id
+WHERE l.ma_lop LIKE '%01%';
