@@ -11,5 +11,10 @@
     <h1>Thong tin</h1>
     Username: ${username} <br>
     Password: ${password}
+    <a href="/buoi2/readCookie">Read Cookie</a>
+    <br>
+    Username: ${usr}
+    <br>
+    Password: ${pwd}
 </body>
 </html>
