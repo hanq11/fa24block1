@@ -1,0 +1,68 @@
+USE LuyenTapBuoi2;
+-- Bài 1: Khai báo và gán giá trị cho biến
+-- Khai báo
+-- DECLARE @ten_bien type
+--	@ten_bien: tên biến, và luôn bắt đầu bằng @
+--	type: kiểu giữ liệu của biến
+
+-- Ví dụ khai báo biến
+DECLARE @year int
+-- Gán giá trị cho biến
+SET @year = 2024
+-- Truy xuất giá trị của biến
+SELECT @year + @year
+
+-- Bài tập: tính tổng của ba số nguyên
+-- Khai báo 3 biến số nguyên, set giá trị cho 3 biến, tính tổng
+DECLARE @a int, @b int, @c int
+SET @a = 1
+SET @b = 2
+SET @c = 3
+SELECT @a + @b + @c
+
+-- Truyền dữ liệu của câu truy vấn vào trong biến
+DECLARE @diemCaoNhat float
+SET @diemCaoNhat = (SELECT MAX(diem) FROM hoc_sinh)
+PRINT 'Diem cao nhat la: ' + CONVERT(VARCHAR, @diemCaoNhat)
+
+-- Biến bảng
+-- Khai bao bien bang
+DECLARE @TB_HocSinh TABLE
+(id int, ten nvarchar(50), nam_sinh int)
+-- Them du lieu vao bien bang
+INSERT INTO @TB_HocSinh 
+VALUES 
+	(1, 'Nguyen Van A', 2000),
+	(2, 'Nguyen Van B', 1993),
+	(3, 'Nguyen Van C', 2006)
+-- Truy van du lieu cua bien bang
+SELECT * FROM @TB_HocSinh
+
+-- BEGIN, END - Khai báo điểm bắt đầu và kết thúc của khối lệnh
+BEGIN 
+	DECLARE @TB_HocSinh TABLE
+	(id int, ten nvarchar(50), nam_sinh int)
+	-- Them du lieu vao bien bang
+	INSERT INTO @TB_HocSinh 
+	VALUES 
+		(1, 'Nguyen Van A', 2000),
+		(2, 'Nguyen Van B', 1993),
+		(3, 'Nguyen Van C', 2006)
+	-- Truy van du lieu cua bien bang
+	SELECT * FROM @TB_HocSinh
+END
+
+BEGIN
+	SELECT * FROM hoc_sinh;
+	PRINT @@ROWCOUNT
+END
+
+-- Khai báo 2 biến float, gán giá trị cho 2 biến,
+-- in ra kết quả tính tổng, hiệu, tích, thương của 2 số
+BEGIN
+	DECLARE @so_thu_nhat float = 1, @so_thu_hai float = 2
+	PRINT N'Tổng: ' + CONVERT(VARCHAR, @so_thu_nhat + @so_thu_hai)
+	PRINT N'Hiệu: ' + CONVERT(VARCHAR, @so_thu_nhat - @so_thu_hai)
+	PRINT N'Tích: ' + CONVERT(VARCHAR, @so_thu_nhat * @so_thu_hai)
+	PRINT N'Thương: ' + CONVERT(VARCHAR, @so_thu_nhat / @so_thu_hai)
+END
