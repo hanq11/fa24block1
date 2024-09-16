@@ -1,5 +1,6 @@
 package com.example.helloworldsd19202.buoi2;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -76,5 +77,27 @@ public class LoginController {
         model.addAttribute("usr", username);
         model.addAttribute("pwd", password);
         return "buoi2/info";
+    }
+
+    @ResponseBody
+    @GetMapping("/testResponseBody")
+    public String testResponseBody() {
+        return "Hello world";
+    }
+
+    @ResponseBody
+    @GetMapping("/testResponseBody2")
+    public LoginRequest testResponseBody2() {
+        return new LoginRequest("1","2");
+    }
+
+    @GetMapping("/testForward")
+    public String testForward() {
+        return "forward:/buoi2/login";
+    }
+
+    @GetMapping("/testRedirect")
+    public String testRedirect() {
+        return "redirect:/buoi2/login";
     }
 }
