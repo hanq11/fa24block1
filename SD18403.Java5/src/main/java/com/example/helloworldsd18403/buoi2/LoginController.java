@@ -76,4 +76,26 @@ public class LoginController {
         model.addAttribute("pwd", pwd);
         return "buoi2/info";
     }
+
+    @ResponseBody
+    @GetMapping("/testResponseBody")
+    public String testResponseBody() {
+        return "Hello world";
+    }
+
+    @ResponseBody
+    @GetMapping("/testResponseBody2")
+    public LoginRequest testResponseBody2() {
+        return new LoginRequest("1", "2");
+    }
+
+    @GetMapping("/testForward")
+    public String testForward() {
+        return "forward:/buoi2/login";
+    }
+
+    @GetMapping("/testRedirect")
+    public String testRedirect() {
+        return "redirect:/buoi2/login";
+    }
 }
