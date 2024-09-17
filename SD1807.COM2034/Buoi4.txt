@@ -1,0 +1,81 @@
+USE LuyenTapBuoi2;
+
+-- Bien vo huong
+BEGIN
+	DECLARE @diem int
+	SET @diem = 3
+	PRINT 'Diem la: ' + CONVERT(VARCHAR, @diem)
+END
+-- Bien bang
+BEGIN
+	DECLARE @TB_hoc_sinh TABLE
+	(id int, ten varchar(50), diem float)
+	
+	INSERT INTO @TB_hoc_sinh
+	VALUES (1, 'Nguyen Van A', '4.5'),
+		(2, 'Nguyen Van B', '5.5'),
+		(3, 'Nguyen Van C', '6.5')
+	
+	SELECT * FROM @TB_hoc_sinh
+END
+
+-- Lay ra diem cao nhat cua hoc sinh, neu diem > 8 thi in ra gioi,
+-- neu diem < 8 thi in ra kha
+BEGIN
+	DECLARE @diem int
+	SET @diem = (SELECT MAX(diem) FROM hoc_sinh)
+	IF @diem > 8
+		BEGIN
+			PRINT 'Gioi'
+		END
+	ELSE 
+		BEGIN
+			PRINT 'Kha'
+		END
+END
+-- In ra dong chu hello world 10 lan
+BEGIN
+	DECLARE @dem int = 1
+	WHILE (@dem <= 10)
+		BEGIN
+			PRINT 'Hello world lan: ' + CONVERT(VARCHAR, @dem)
+			SET @dem = @dem + 1
+		END
+END
+-- Vi du break
+BEGIN
+	DECLARE @dem int = 1
+	WHILE @dem <= 10
+		BEGIN
+			IF @dem = 6
+				BEGIN
+					BREAK
+				END
+			PRINT 'Hello world lan: ' + CONVERT(VARCHAR, @dem)
+			SET @dem = @dem + 1
+		END
+END
+-- Vi du continue
+BEGIN
+	DECLARE @dem int = 1
+	WHILE @dem <= 10
+		BEGIN
+			IF @dem = 6
+				BEGIN
+					SET @dem = @dem + 1
+					CONTINUE
+			PRINT 'Hello world lan: ' + CONVERT(VARCHAR, @dem)
+			SET @dem = @dem + 1
+		END
+END
+-- B1: Su dung vong lap while, tinh tong diem cua cac hoc sinh trong bang hoc sinh va in ra
+-- B2: Van nhu bai tren, nhung chi cong nhung diem lon hon 7
+BEGIN
+	DECLARE @dem int = 1, @tong float = 0 
+	WHILE @dem <= 3
+		BEGIN
+			SET @tong = @tong + (SELECT diem FROM hoc_sinh WHERE id = @dem)
+			SET @dem = @dem + 1
+		END
+		PRINT 'Tong la: ' + CONVERT(VARCHAR, @tong)
+END
