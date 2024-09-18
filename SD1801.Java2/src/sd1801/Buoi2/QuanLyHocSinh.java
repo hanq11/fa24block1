@@ -56,8 +56,32 @@ public class QuanLyHocSinh {
         danhSach.removeAll(danhSachCanXoa);
     }
     // method: sửa học sinh theo tên
-    
+    public void suaHocSinh() {
+        System.out.println("Vui long nhap ten can sua: ");
+        String tenCanSua = scanner.nextLine();
+        for(HocSinh hs: danhSach) {
+            if(hs.getTen().equals(tenCanSua)) {
+                System.out.print("Vui long nhap tuoi moi: ");
+                hs.setTuoi(Integer.valueOf(scanner.nextLine()));
+
+                System.out.print("Vui long nhap ma moi: ");
+                hs.setMa(scanner.nextLine());
+
+                System.out.print("Vui long nhap diem moi: ");
+                hs.setDiem(Double.valueOf(scanner.nextLine()));
+            }
+        }
+    }
     // method: sắp xếp học sinh theo tên tăng dần
-    
+    public void sapXepTheoTen() {
+        danhSach.sort((o1, o2) -> {
+            return o1.getTen().compareTo(o2.getTen());
+        });
+    }
     // method: sắp xếp học sinh theo điểm giảm dần
+    public void sapXepTheoDiem() {
+        danhSach.sort((o1, o2) -> {
+            return Double.compare(o2.getDiem(), o1.getDiem());
+        });
+    }
 }
