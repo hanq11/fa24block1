@@ -10,11 +10,11 @@
 </head>
 <body>
     <h2>Tim kiem: </h2>
-    <form action="" method="get">
-        ID sinh vien: <input type="text"> <br>
+    <form action="/buoi4/search" method="get">
+        ID sinh vien: <input type="text" name="id"> <br>
         <button>Tim kiem</button>
     </form>
-    <a href="">Them sinh vien</a>
+    <a href="/buoi4/add">Them sinh vien</a>
     <h2>Danh sach sinh vien</h2>
     <table>
         <thead>
@@ -36,8 +36,8 @@
                     <td>${sinhVien.diaChi}</td>
                     <td>${sinhVien.gioiTinh ? "Nam" : "Nu"}</td>
                     <td>
-                        <a href="">Xoa</a>
-                        <a href="">Update</a>
+                        <a href="/buoi4/delete?id=${sinhVien.id}">Xoa</a>
+                        <a href="/buoi4/update/${sinhVien.id}">Update</a>
                     </td>
                 </tr>
             </c:forEach>
