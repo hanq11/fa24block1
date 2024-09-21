@@ -1,0 +1,53 @@
+USE LuyenTapBuoi2;
+
+SELECT * FROM hoc_sinh
+WHERE id = '2';
+SELECT 8/3.2;
+
+-- CAST( expression AS type(length))
+SELECT CAST (1.1 AS INT);
+SELECT GETDATE();
+SELECT CAST(GETDATE() AS DATE);
+
+-- CONVERT(type(length), expression, style)
+SELECT CONVERT(datetime, '2020-04-05');
+SELECT CONVERT(varchar, GETDATE(), 107);
+
+BEGIN
+DECLARE @TB_hoc_sinh TABLE
+(id int, diem int)
+
+DECLARE @dem int = 0
+WHILE @dem < 1000
+	BEGIN
+		INSERT INTO @TB_hoc_sinh VALUES (@dem, @dem)
+		SET @dem += 1
+	END
+SELECT * FROM @TB_hoc_sinh
+END
+
+
+-- Gia tri tuyet doi
+SELECT ABS(-2)
+-- Lay lam tron duoi
+SELECT FLOOR(5.4)
+-- Lam tron can tren
+SELECT CEILING(5.4)
+-- Tinh luy thua
+SELECT POWER(4,5)
+
+-- Do dai cua chuoi
+SELECT LEN('ABCDEFGH')
+--
+SELECT LTRIM('           ABCD')
+-- Cat chuoi
+SELECT SUBSTRING('ABCDEF', 2, 3)
+--
+SELECT LOWER('ABCD')
+SELECT UPPER('bcde')
+
+SELECT * FROM hoc_sinh
+SELECT id, LEFT(ten_hoc_sinh, 1) AS 'Chu cai dau',
+	RIGHT(ten_hoc_sinh, 2) AS 'Hai chu cai cuoi',
+	ma_hoc_sinh + dia_chi AS 'Cong chuoi'
+FROM hoc_sinh
