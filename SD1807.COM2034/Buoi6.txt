@@ -1,0 +1,116 @@
+CREATE DATABASE BaiTapBuoi6;
+USE BaiTapBuoi6;
+
+CREATE TABLE lop_hoc(
+	ma_lop varchar(10) PRIMARY KEY,
+	ten_lop varchar(30)
+);
+
+CREATE TABLE hoc_sinh(
+	ma_hoc_sinh varchar(10) PRIMARY KEY,
+	ma_lop varchar(10),
+	ten_hoc_sinh nvarchar(50),
+	ngay_sinh date,
+	FOREIGN KEY(ma_lop) REFERENCES lop_hoc(ma_lop) 
+);
+
+CREATE TABLE mon_hoc(
+	ma_mon varchar(10) PRIMARY KEY,
+	ten_mon_hoc varchar(50),
+	so_tin_chi int
+); 
+
+CREATE TABLE diem(
+	id int IDENTITY(1,1) PRIMARY KEY,
+	ma_mon varchar(10),
+	ma_hoc_sinh varchar(10),
+	diem int,
+	FOREIGN KEY(ma_mon) REFERENCES mon_hoc(ma_mon),
+	FOREIGN KEY(ma_hoc_sinh) REFERENCES hoc_sinh(ma_hoc_sinh)
+);
+
+INSERT INTO lop_hoc 
+	(ma_lop, ten_lop)
+VALUES
+	('L1', 'UDPM'),
+	('L2', 'MB'),
+	('L3', 'WEB'),
+	('L4', 'IT');
+
+INSERT INTO hoc_sinh
+	(ma_hoc_sinh, ten_hoc_sinh, ma_lop, ngay_sinh)
+VALUES
+	('1',	'Nguyen Thuy Hang', 'L1', CONVERT(date,'10/01/2000', 103)),
+	('2',	'Nguyen Anh Dung', 'L2', CONVERT(date,'11/02/2002', 103)),
+	('3',	'Dang Quang Minh', 'L4', CONVERT(date,'12/04/2003', 103)),
+	('4',	'Nguyen Kim Luong', 'L1', CONVERT(date,'13/01/1998', 103)),
+	('5',	'Tran Quang Phong', 'L4', CONVERT(date,'14/01/2000', 103));
+
+INSERT INTO mon_hoc
+	(ma_mon, ten_mon_hoc, so_tin_chi)
+VALUES
+	('M1','Toán',	20),
+	('M2','Văn', 	30),
+	('M3','Anh',	15);
+SELECT * FROM mon_hoc;
+
+INSERT INTO diem
+	(ma_mon, ma_hoc_sinh, diem)
+VALUES
+	('M1','1',	9),
+	('M2','2',	9),
+	('M1','3',	7),
+	('M2','4',	5),
+	('M3','5',	6),
+	('M1','5',	3),
+	('M3','4',	2);
+SELECT * FROM diem;
+
+--- Chỉnh sửa bảng lớp học add thêm trường mã khoa	(0.5 điểm)
+ALTER TABLE lop_hoc
+ADD ma_khoa varchar(10);
+--- Chỉnh sửa bảng lớp học xóa trường mã khoa vừa thêm(0.5 điểm)
+ALTER TABLE lop_hoc
+DROP COLUMN ma_khoa;
+--- Viết câu lệnh khai báo 3 biến : lương int, hệ số int, income int		
+--set giá trị cho biến lương và hệ số		
+--in ra income theo công thức lương * hệ số(1 điểm)	
+BEGIN
+	DECLARE @luong int, @he_so int, @income int;
+	SET @luong = 5000;
+	SET @he_so = 3;	
+	SET @income = @luong * @he_so;
+	Print N'Thu thập là: ' + CAST(@income AS VARCHAR);
+END
+---Tạo biến bảng hocSinh_Tam gồm các thuộc tính maSinhVien,tenSV. Thêm , sửa, truy vấn với bảng hocSinhTam(1 điểm)
+BEGIN
+	DECLARE @tb_hoc_sinh TABLE(
+		ma_hoc_sinh varchar(10),
+		ten_hoc_sinh nvarchar(50)
+	);
+	-- Them du lieu
+	INSERT INTO @tb_hoc_sinh
+		(ma_hoc_sinh, ten_hoc_sinh)
+	VALUES
+		('7', 'Nguyen Van A'),
+		('8', 'Nguyen Van B');
+	-- Sua du lieu
+	UPDATE @tb_hoc_sinh
+	SET ten_hoc_sinh = 'Tran Van D'
+	WHERE ma_hoc_sinh = '7';
+	-- Truy van
+	SELECT * FROM @tb_hoc_sinh;
+	-- Lay tat ca du lieu cua bang hoc_sinh cho vao @tb_hoc_sinh
+	INSERT INTO @tb_hoc_sinh(ma_hoc_sinh, ten_hoc_sinh)
+	SELECT ma_hoc_sinh, ten_hoc_sinh FROM hoc_sinh;
+	-- Truy van
+	SELECT * FROM @tb_hoc_sinh;
+END
+---Sử dụng T-SQL để tính tổng, hiệu, tich, thương của 2 biến truyền vào và in ra màn hình tổng hiệu, tích , thương(1 điểm)
+BEGIN
+	DECLARE @so_thu_nhat float = 1, @so_thu_hai float = 2
+	PRINT N'Tổng: ' + CONVERT(VARCHAR, @so_thu_nhat + @so_thu_hai)
+	PRINT N'Hiệu: ' + CONVERT(VARCHAR, @so_thu_nhat - @so_thu_hai)
+	PRINT N'Tích: ' + CONVERT(VARCHAR, @so_thu_nhat * @so_thu_hai)
+	PRINT N'Thương: ' + CONVERT(VARCHAR, @so_thu_nhat / @so_thu_hai)
+END
