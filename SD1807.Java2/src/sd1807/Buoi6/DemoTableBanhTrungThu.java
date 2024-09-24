@@ -16,9 +16,10 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
     /**
      * Creates new form DemoTableBanhTrungThu
      */
+    ArrayList<BanhTrungThu> listBanh = new ArrayList<>();
     public DemoTableBanhTrungThu() {
         initComponents();
-        ArrayList<BanhTrungThu> listBanh = new ArrayList<>();
+        
         listBanh.add(new BanhTrungThu(1, "Thap cam", 4.5f, "Suong sao hat luu"));
         listBanh.add(new BanhTrungThu(2, "Banh deo", 5.6f, "Lava trung chay"));
         listBanh.add(new BanhTrungThu(3, "Banh dau xanh", 7.8f, "Hai trung cut"));
@@ -27,6 +28,7 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
     
     public void fillTableData(ArrayList<BanhTrungThu> danhSach) {
         DefaultTableModel model = (DefaultTableModel) tblBanh.getModel();
+        model.setRowCount(0);
         for(BanhTrungThu banh: danhSach) {
             model.addRow(new Object[]{banh.getId(), banh.getTen(), banh.getGia(), banh.getNhanBanh()});
         }
@@ -44,16 +46,16 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBanh = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
+        txtTen = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtGia = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtNhanBanh = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnThem = new javax.swing.JButton();
+        btnSua = new javax.swing.JButton();
+        btnXoa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,6 +67,11 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
                 "Id", "Ten", "Gia", "Nhan banh"
             }
         ));
+        tblBanh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBanhMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblBanh);
 
         jLabel1.setText("id");
@@ -75,11 +82,26 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
 
         jLabel4.setText("Nhan banh");
 
-        jButton1.setText("Them");
+        btnThem.setText("Them");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Sua");
+        btnSua.setText("Sua");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Xoa");
+        btnXoa.setText("Xoa");
+        btnXoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,16 +121,16 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(72, 72, 72)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addComponent(txtNhanBanh, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                        .addComponent(txtGia, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(txtTen, javax.swing.GroupLayout.Alignment.TRAILING)))
                 .addGap(72, 72, 72)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnThem)
+                    .addComponent(btnSua)
+                    .addComponent(btnXoa))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -117,28 +139,76 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnThem))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSua))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnXoa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNhanBanh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        int id = Integer.valueOf(txtId.getText());
+        String ten = txtTen.getText();
+        float gia = Float.valueOf(txtGia.getText());
+        String nhanBanh = txtNhanBanh.getText();
+        BanhTrungThu banh = new BanhTrungThu(id, ten, gia, nhanBanh);
+        listBanh.add(banh);
+        fillTableData(listBanh);
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void tblBanhMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBanhMouseClicked
+        int selectedIndex = tblBanh.getSelectedRow();
+        String id = tblBanh.getValueAt(selectedIndex, 0).toString();
+        String ten = tblBanh.getValueAt(selectedIndex, 1).toString();
+        String gia = tblBanh.getValueAt(selectedIndex, 2).toString();
+        String nhanBanh = tblBanh.getValueAt(selectedIndex, 3).toString();
+        txtId.setText(id);
+        txtTen.setText(ten);
+        txtGia.setText(gia);
+        txtNhanBanh.setText(nhanBanh);
+    }//GEN-LAST:event_tblBanhMouseClicked
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        int id = Integer.valueOf(txtId.getText());
+        String ten = txtTen.getText();
+        float gia = Float.valueOf(txtGia.getText());
+        String nhanBanh = txtNhanBanh.getText();
+        BanhTrungThu banh = new BanhTrungThu(id, ten, gia, nhanBanh);
+        for(int i = 0; i < listBanh.size(); i++) {
+            if(listBanh.get(i).getId() == id) {
+                listBanh.set(i, banh);
+            }
+        }
+        fillTableData(listBanh);
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
+        BanhTrungThu banhCanXoa = null;
+        int id = Integer.valueOf(txtId.getText()); 
+        for(int i = 0; i < listBanh.size(); i++) {
+            if(listBanh.get(i).getId() == id) {
+                banhCanXoa = listBanh.get(i);
+            }
+        }
+        listBanh.remove(banhCanXoa);
+        fillTableData(listBanh);
+    }//GEN-LAST:event_btnXoaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -176,18 +246,18 @@ public class DemoTableBanhTrungThu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnSua;
+    private javax.swing.JButton btnThem;
+    private javax.swing.JButton btnXoa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTable tblBanh;
+    private javax.swing.JTextField txtGia;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtNhanBanh;
+    private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
 }
