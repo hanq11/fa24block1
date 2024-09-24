@@ -1,0 +1,52 @@
+USE BaiTapBuoi6;
+---Liệt kê top 2 sinh viên có điểm cao nhất 
+-- và sắp xếp theo chiều giảm dần theo tên ( 1 điểm )
+SELECT TOP 2 * 
+FROM hoc_sinh hs
+INNER JOIN diem d ON hs.ma_hoc_sinh = d.ma_hoc_sinh
+ORDER BY d.diem DESC, hs.ten_hoc_sinh DESC
+---Liệt kê  các sinh viên có điểm >= điểm 
+--trung bình và tên sinh viên chứa chữ u ( 1 điểm )
+SELECT hs.ma_hoc_sinh, hs.ten_hoc_sinh, d.diem
+FROM hoc_sinh hs
+INNER JOIN diem d ON hs.ma_hoc_sinh = d.ma_hoc_sinh
+WHERE d.diem > (SELECT AVG(diem) FROM diem)
+AND hs.ten_hoc_sinh LIKE '%u%';
+---Liệt kê các sinh viên có ngày sinh 
+--bắt đầu từ 2000-01-01 đến 2000-12-31  ( 1 điểm )
+
+---Liệt kê các lớp mà không có sinh viên theo học
+SELECT * FROM lop_hoc lh
+WHERE lh.ma_lop NOT IN (SELECT ma_lop FROM hoc_sinh)
+---Viết câu lệnh khai báo 3 biến : chieuDai int, 
+--chieuRong int, dienTich int, chuVi int. 
+--Set giá trị cho chieuDai,chieuRong
+--in ra dienTich theo công thức chieuDai * chieuRong
+--in ra chuVi theo công thức (chieuRong+chieuDai)*2
+BEGIN
+	DECLARE @chieu_dai int = 1, @chieu_rong int = 2
+	DECLARE @dien_tich  int, @chu_vi int
+	SET @dien_tich = @chieu_dai * @chieu_rong
+	SET @chu_vi = (@chieu_dai + @chieu_rong) * 2
+	PRINT 'Chu vi la: ' + CAST(@chu_vi AS varchar) 
+	PRINT 'Dien tich la: ' + CAST(@dien_tich AS varchar)
+END
+
+---Tạo biến bảng hs_tam gồm các thuộc tính ma,tem,ngay_sinh .
+-- Thêm , sửa, truy vấn với bảng hs_tam với dữ liệu được 
+-- thêm lấy từ bảng hocsinh
+BEGIN
+	DECLARE @hs_tam TABLE(
+		ma int,
+		ten varchar(50),
+		ngay_sinh date
+	)
+	INSERT INTO @hs_tam (ma, ten, ngay_sinh)
+	SELECT ma_hoc_sinh, ten_hoc_sinh, ngay_sinh FROM hoc_sinh;
+	SELECT * FROM @hs_tam;
+END
+
+---Sử dụng T-SQL để tính tổng, hiệu, tich, thương của 2 biến truyền vào và in ra màn hình tổng hiệu, tích , thương
+
+---Sử dụng T-SQL để tính diện tích, chu vi của hình chữ nhật và in ra màn hình chu vi, diện tích
+
