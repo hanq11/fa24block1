@@ -2,8 +2,10 @@ package com.example.helloworldsd18403.buoi8.controller;
 
 import com.example.helloworldsd18403.buoi8.model.Country;
 import com.example.helloworldsd18403.buoi8.model.Staff;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,10 @@ public class StaffController {
     }
 
     @PostMapping("/staff")
-    public String save(@ModelAttribute("staff") Staff staff, Model model) {
+    public String save(@Valid @ModelAttribute("staff") Staff staff, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()) {
+            return "buoi8/hien-thi";
+        }
         model.addAttribute("message", "luu thanh cong");
         return "buoi8/hien-thi";
     }
