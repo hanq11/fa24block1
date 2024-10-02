@@ -42,4 +42,51 @@ public class SinhVienRepository {
         }
         return danhSach;
     }
+    
+    public void themSinhVien(SinhVien sv) {
+        String sql = """
+                     INSERT INTO Sinh_Vien(ten, tuoi, diem, gioi_tinh)
+                        VALUES (?, ?, ?, ?)
+                     """;
+        try {
+            PreparedStatement ps = this.conn.prepareStatement(sql);
+            ps.setString(1, sv.getTen());
+            ps.setInt(2, sv.getTuoi());
+            ps.setFloat(3, sv.getDiem());
+            ps.setBoolean(4, sv.isGioiTinh());
+            ps.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void suaSinhVien(SinhVien sv) {
+        String sql = """
+                      UPDATE sinh_vien
+                      SET ten = ?, tuoi = ?, diem = ?, gioi_tinh = ?
+                      WHERE id = ?
+                      """;
+        try {
+            PreparedStatement ps = this.conn.prepareStatement(sql);
+            ps.setString(1, sv.getTen());
+            ps.setInt(2, sv.getTuoi());
+            ps.setFloat(3, sv.getDiem());
+            ps.setBoolean(4, sv.isGioiTinh());
+            ps.setInt(5, sv.getId());
+            ps.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void xoaSinhVien(int id) {
+        String sql = "DELETE FROM Sinh_Vien WHERE id = ?";
+        try {
+            PreparedStatement ps = this.conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
