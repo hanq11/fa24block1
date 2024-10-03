@@ -1,0 +1,91 @@
+USE BaiTapBuoi6;
+
+SELECT * FROM hoc_sinh;
+GO
+-- STORED PROCEDURE -- Thu tuc ham
+-- Luu tru mot so cau lenh lien quan SQL
+-- Co the goi lai bat cu luc nao
+-- PROCEDURE có tham số truyền vào, và kiểu trả ra
+-- Cú pháp
+-- CREATE PROC ten_proc(@tham_so kieu_du_lieu)
+-- AS
+--     BEGIN
+--     END
+
+CREATE PROC get_hoc_sinh
+AS
+BEGIN
+    SELECT * FROM hoc_sinh
+END
+GO
+-- Chay procedure sử dụng EXEC ten_proc
+EXEC get_hoc_sinh
+GO
+-- Tạo procedure lấy ra tên học sinh, tên môn học 
+-- và điểm môn học của học sinh đó
+CREATE PROC get_thong_tin
+AS
+BEGIN
+    SELECT hs.ten_hoc_sinh, mh.ten_mon_hoc, d.diem
+    FROM hoc_sinh hs
+    INNER JOIN diem d ON d.ma_hoc_sinh = hs.ma_hoc_sinh
+    INNER JOIN mon_hoc mh ON mh.ma_mon = d.ma_mon
+END
+GO
+-- Chay procedure
+EXEC get_thong_tin
+GO
+-- Xoa procedure
+-- DROP PROC ten_proc
+DROP PROC get_thong_tin
+GO
+-- Sua procedure
+-- ALTER PROC
+ALTER PROC get_thong_tin
+AS
+BEGIN
+    SELECT hs.ten_hoc_sinh
+    FROM hoc_sinh hs
+    INNER JOIN diem d ON d.ma_hoc_sinh = hs.ma_hoc_sinh
+    INNER JOIN mon_hoc mh ON mh.ma_mon = d.ma_mon
+END
+GO
+-- Chay
+EXEC get_thong_tin;
+GO
+-- Truyen tham so vao PROC
+CREATE PROC tim_kiem(@ten varchar(40))
+AS
+BEGIN
+    SELECT * FROM hoc_sinh WHERE ten_hoc_sinh LIKE @ten
+END
+GO
+-- Chay procedure voi tham so
+EXEC tim_kiem @ten = '%Thuy%'
+GO
+-- Tao PROCEDURE truyền vào 2 năm A và B
+-- Trả về các học sinh có ngày sinh nằm trong khoảng năm A và B
+CREATE PROC tim_kiem_theo_nam(@nam_be int, @nam_lon int)
+AS
+BEGIN
+    SELECT * FROM hoc_sinh
+    WHERE YEAR(ngay_sinh) >= @nam_be AND YEAR(ngay_sinh) <= @nam_lon
+END
+GO
+-- Chay
+EXEC tim_kiem_theo_nam @nam_be = 1999, @nam_lon = 2000
+GO
+-- Trả về dữ liệu với Procedure
+CREATE PROC tra_ve(@ket_qua int output)
+AS
+BEGIN
+    SET @ket_qua = (SELECT COUNT(*) FROM hoc_sinh)
+    RETURN
+END
+GO
+-- Chay
+BEGIN
+    DECLARE @so_luong_hoc_sinh int
+    EXEC tra_ve @so_luong_hoc_sinh output
+    PRINT 'So luong hoc sinh: ' + CONVERT(varchar(20), @so_luong_hoc_sinh)
+END
