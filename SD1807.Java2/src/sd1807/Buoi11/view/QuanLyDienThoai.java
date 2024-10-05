@@ -46,6 +46,15 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
         cboHang.setModel(model);
     }
     
+    public DienThoai readFormData() {
+        int id = Integer.valueOf(txtId.getText());
+        String ten = txtTen.getText();
+        String hang = cboHang.getSelectedItem().toString();
+        float gia = Float.valueOf(txtGia.getText());
+        boolean kheSim = rdoCo.isSelected() ? true : false;
+        return new DienThoai(id, ten,hang, gia, kheSim);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,7 +72,7 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
         txtTen = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtHang = new javax.swing.JTextField();
+        txtGia = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         cboHang = new javax.swing.JComboBox<>();
@@ -84,6 +93,11 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
                 "Id", "Ten", "Hang", "Gia", "Khe sim"
             }
         ));
+        tblDienThoai.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDienThoaiMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblDienThoai);
 
         jLabel1.setText("Id");
@@ -105,8 +119,18 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
         rdoKhong.setText("Khong");
 
         btnThem.setText("Them");
+        btnThem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThemActionPerformed(evt);
+            }
+        });
 
         btnSua.setText("Sua");
+        btnSua.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSuaActionPerformed(evt);
+            }
+        });
 
         btnXoa.setText("Xoa");
         btnXoa.addActionListener(new java.awt.event.ActionListener() {
@@ -116,6 +140,11 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
         });
 
         btnSapXep.setText("Sap xep");
+        btnSapXep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSapXepActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,7 +169,7 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtHang, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnSapXep))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -188,7 +217,7 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(txtHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtGia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
@@ -204,9 +233,46 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    private void tblDienThoaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDienThoaiMouseClicked
+        int selectedIndex = tblDienThoai.getSelectedRow();
+        String id = tblDienThoai.getValueAt(selectedIndex, 0).toString();
+        String ten = tblDienThoai.getValueAt(selectedIndex, 1).toString();
+        String hang = tblDienThoai.getValueAt(selectedIndex, 2).toString();
+        String gia = tblDienThoai.getValueAt(selectedIndex, 3).toString();
+        boolean kheSim = tblDienThoai.getValueAt(selectedIndex, 4)
+                .toString().equals("Co") ? true : false;
+        
+        txtId.setText(id);
+        txtTen.setText(ten);
+        cboHang.setSelectedItem(hang);
+        txtGia.setText(gia);
+        if(kheSim) {
+            rdoCo.setSelected(true);
+        } else {
+            rdoKhong.setSelected(true);
+        }
+    }//GEN-LAST:event_tblDienThoaiMouseClicked
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        dtsv.themDienThoai(readFormData());
+        fillTableData(dtsv.getAll());
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        dtsv.suaDienThoai(readFormData());
+        fillTableData(dtsv.getAll());
+    }//GEN-LAST:event_btnSuaActionPerformed
+
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-        // TODO add your handling code here:
+        dtsv.xoaDienThoai(Integer.valueOf(txtId.getText()));
+        fillTableData(dtsv.getAll());
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnSapXepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSapXepActionPerformed
+        dtsv.sapXep();
+        fillTableData(dtsv.getAll());
+    }//GEN-LAST:event_btnSapXepActionPerformed
 
     /**
      * @param args the command line arguments
@@ -259,7 +325,7 @@ public class QuanLyDienThoai extends javax.swing.JFrame {
     private javax.swing.JRadioButton rdoCo;
     private javax.swing.JRadioButton rdoKhong;
     private javax.swing.JTable tblDienThoai;
-    private javax.swing.JTextField txtHang;
+    private javax.swing.JTextField txtGia;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
