@@ -1,0 +1,68 @@
+USE BaiTapBuoi6;
+GO
+
+CREATE VIEW view_hoc_sinh
+AS
+SELECT * FROM hoc_sinh
+GO
+
+SELECT * FROM view_hoc_sinh
+GO
+
+ALTER VIEW view_hoc_sinh
+AS
+SELECT hs.ten_hoc_sinh, lh.ten_lop, d.diem FROM hoc_sinh hs
+INNER JOIN lop_hoc lh ON hs.ma_lop = lh.ma_lop
+INNER JOIN diem d ON hs.ma_hoc_sinh = d.ma_hoc_sinh
+GO
+
+SELECT * FROM view_hoc_sinh
+
+DROP VIEW view_hoc_sinh
+GO
+-- Tạo view hiển thị học sinh và lớp học
+CREATE VIEW view_hoc_sinh_lop_hoc
+AS
+SELECT hs.ma_hoc_sinh, lh.ma_lop, lh.ten_lop FROM hoc_sinh hs
+INNER JOIN lop_hoc lh ON hs.ma_lop = lh.ma_lop
+GO
+SELECT * FROM view_hoc_sinh_lop_hoc
+GO
+-- Tạo view Hiển thị danh sách các học sinh có điểm lớn hơn 8 ở tất cả các môn học
+CREATE VIEW view_hoc_sinh_diem_8
+AS
+SELECT DISTINCT hs.ma_hoc_sinh, hs.ten_hoc_sinh FROM hoc_sinh hs
+INNER JOIN diem d ON hs.ma_hoc_sinh = d.ma_hoc_sinh
+WHERE d.diem > 8
+GO
+SELECT * FROM view_hoc_sinh_diem_8
+GO
+-- Tạo view tính tổng điểm của mỗi học sinh ở tất cả các môn học
+CREATE VIEW view_diem_trung_binh
+AS
+SELECT hs.ma_hoc_sinh, hs.ten_hoc_sinh, SUM(d.diem) AS 'Tong diem' FROM hoc_sinh hs
+INNER JOIN diem d ON hs.ma_hoc_sinh = d.ma_hoc_sinh
+GROUP BY hs.ma_hoc_sinh, hs.ten_hoc_sinh
+GO
+SELECT * FROM view_diem_trung_binh
+GO
+-- Tạo view học sinh chưa có bất kì điểm nào
+CREATE VIEW view_hs_chua_co_diem
+AS
+SELECT * FROM hoc_sinh hs
+WHERE NOT EXISTS (SELECT 1 FROM diem d WHERE d.ma_hoc_sinh = hs.ma_hoc_sinh)
+GO
+SELECT * FROM view_hs_chua_co_diem
+INSERT INTO hoc_sinh
+VALUES('6', 'L4', 'Test', '2020-03-04')
+SELECT TOP 2 * FROM hoc_sinh
+SELECT TOP 2 * FROM diem
+GO
+-- Tạo view thống kê điểm trung bình của mỗi môn
+CREATE VIEW view_trung_binh_moi_mon
+AS 
+SELECT mh.ma_mon, mh.ten_mon_hoc, AVG(d.diem) AS 'Diem trung binh' FROM mon_hoc mh
+INNER JOIN diem d ON mh.ma_mon = d.ma_mon
+GROUP BY mh.ma_mon, mh.ten_mon_hoc
+GO
+SELECT * FROM view_trung_binh_moi_mon
