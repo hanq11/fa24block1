@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/syn/NetBeansProjects/MOB1024.01KieuMai/src/mob1024/pkg01kieumai/buoi11/model/DongVat.java</file>
+            <file>file:/Users/syn/NetBeansProjects/MOB1024.01KieuMai/src/mob1024/pkg01kieumai/buoi11/repository/DongVatRepository.java</file>
+            <file>file:/Users/syn/NetBeansProjects/MOB1024.01KieuMai/src/mob1024/pkg01kieumai/buoi11/view/QuanLyDongVat.java</file>
+            <file>file:/Users/syn/NetBeansProjects/MOB1024.01KieuMai/src/mob1024/pkg01kieumai/buoi11/util/DbConnection.java</file>
+        </group>
     </open-files>
 </project-private>
