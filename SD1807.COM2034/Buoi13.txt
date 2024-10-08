@@ -1,0 +1,93 @@
+USE BaiTapBuoi6;
+GO
+-- Tao function tra ve ma hoc sinh, truyen vao ten hoc sinh
+CREATE FUNCTION fnMaHocSinh(@tenHocSinh varchar(50))
+RETURNS varchar(50)
+AS
+    BEGIN
+        RETURN(SELECT ma_hoc_sinh FROM hoc_sinh WHERE ten_hoc_sinh = @tenHocSinh)
+    END
+GO
+-- Chay
+SELECT dbo.fnMaHocSinh('Nguyen Anh Dung') 
+GO
+-- Sua
+ALTER FUNCTION fnMaHocSinh(@tenHocSinh varchar(50))
+RETURNS date
+AS
+    BEGIN
+        RETURN(SELECT ngay_sinh FROM hoc_sinh WHERE ten_hoc_sinh = @tenHocSinh)
+    END
+GO
+-- Chay
+SELECT dbo.fnMaHocSinh('Nguyen Anh Dung') 
+GO
+-- Tạo hàm tính tuổi của học sinh, truyền vào ngày sinh
+CREATE FUNCTION fnTinhTuoi(@ngaySinh date)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @tuoi int = 0
+    SET @tuoi = YEAR(getDate()) - YEAR(@ngaySinh)
+    RETURN @tuoi
+END
+GO
+-- Chay
+SELECT dbo.fnTinhTuoi('2000-03-04')
+GO
+-- Su dung trong truy van
+SELECT ma_hoc_sinh, ten_hoc_sinh, dbo.fnTinhTuoi(ngay_sinh) AS 'Tuoi' FROM hoc_sinh
+GO
+-- Tạo hàm tính điểm trung bình của một học sinh, truyền vào mã học sinh
+CREATE FUNCTION fnTrungBinh(@ma varchar(50))
+RETURNS float
+AS
+BEGIN
+    DECLARE @trungBinh float
+    SET @trungBinh = (SELECT AVG(d.diem) FROM diem d WHERE ma_hoc_sinh = @ma)
+    RETURN @trungBinh
+END
+GO
+-- Liệt kê mã học sinh, tên học sinh và điểm trung bình của từng học sinh
+SELECT ma_hoc_sinh, ten_hoc_sinh, dbo.fnTrungBinh(ma_hoc_sinh) FROM hoc_sinh
+GO
+-- Hàm trả về bảng
+CREATE FUNCTION fnDiem(@ma varchar(50))
+RETURNS table
+AS
+RETURN (SELECT * FROM diem WHERE ma_hoc_sinh = @ma)
+GO
+-- Chạy
+SELECT * FROM dbo.fnDiem('2')
+-- JOIN 
+SELECT hs.ma_hoc_sinh, hs.ten_hoc_sinh, bd.diem 
+FROM hoc_sinh hs
+JOIN dbo.fnDiem('2') AS bd ON hs.ma_hoc_sinh = bd.ma_hoc_sinh
+GO
+-- Tạo hàm trả về danh sách các môn học mà học sinh đã học, truyền vào mã học sinh
+CREATE FUNCTION fnMonHoc(@ma varchar(50))
+RETURNS table
+AS
+    RETURN(SELECT mh.ten_mon_hoc FROM diem d 
+        JOIN mon_hoc mh ON d.ma_mon = mh.ma_mon
+        WHERE d.ma_hoc_sinh = @ma)
+GO
+-- Chay
+SELECT * FROM dbo.fnMonHoc('4')
+GO
+-- Ví dụ bảng phức tạp
+CREATE FUNCTION fnThongTin(@ma varchar(50))
+RETURNS @thongTin table
+    (ten varchar(50), diem int, mon_hoc varchar(50))
+AS
+BEGIN
+    INSERT INTO @thongTin
+    SELECT hs.ten_hoc_sinh, d.diem, mh.ten_mon_hoc FROM diem d
+    JOIN hoc_sinh hs ON d.ma_hoc_sinh = hs.ma_hoc_sinh
+    JOIN mon_hoc mh ON d.ma_mon = mh.ma_mon
+    WHERE hs.ma_hoc_sinh = @ma
+    RETURN
+END
+GO
+-- Chay
+SELECT * FROM fnThongTin('1')
