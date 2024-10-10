@@ -1,0 +1,110 @@
+----------------------- De Bai
+- Tạo CSDL KiemTraLan2 có các bảng sau (2 điểm)
+QuanLy(MaQuanLy, TenQuanLy, Email, NamSinh)
+NgheSi(MaNgheSi, MaQuanLy, TenNgheSi, Luong, SoDienThoai) 
+	- Trong đó, MaQuanLy ở bảng QuanLy và MaNgheSi là khóa chính
+	- MaQuanLy ở bảng NgheSi là khóa ngoại
+- Tạo Thủ tục (PROC) thêm dữ liệu cho 2 bảng, với mỗi thủ tục viết sẵn 3 lời gọi thành công (2 điểm)
+- Tạo và sử dụng Khung nhìn (View) có tên VNgheSi. Hiển thị thông tin gồm TenNgheSi, TenQuanLy, Luong, SoDienThoai (2 điểm)
+- Tạo và sử dụng Khung nhìn (View) có tên VTopNgheSi. Hiển thị TOP 2 NgheSi có lương cao nhất (1 điểm)
+- Tạo và sử dụng Hàm(Function) có đầu vào là SoDienThoai, trả về tên của NgheSi(2 điểm)
+- Tạo và sử dụng Thủ tục (PROC) để xóa QuanLy ở bảng QuanLy và bảng liên quan. Truyền vào MaQuanLy(1 điểm)
+
+----------------------- Loi giai
+CREATE DATABASE KiemTraLan2;
+USE KiemTraLan2;
+-- Cau 1
+CREATE TABLE QuanLy(
+    MaQuanLy varchar(50) PRIMARY KEY,
+    TenQuanLy varchar(50),
+    Email varchar(50),
+    NamSinh int
+)
+
+CREATE TABLE NgheSi(
+    MaNgheSi varchar(50) PRIMARY KEY,
+    MaQuanLy varchar(50),
+    TenNgheSi varchar(50),
+    Luong float,
+    SoDienThoai varchar(50),
+    FOREIGN KEY(MaQuanLy) REFERENCES QuanLy(MaQuanLy)
+)
+GO
+-- Cau 2
+-- Them Quan ly
+CREATE PROC ThemQuanLy
+    @MaQuanLy varchar(50),
+    @TenQuanLy varchar(50),
+    @Email varchar(50),
+    @NamSinh int
+AS
+BEGIN
+    INSERT INTO QuanLy
+    VALUES(@MaQuanLy, @TenQuanLy, @Email, @NamSinh)
+END
+GO
+EXEC ThemQuanLy 'QL01', 'Nguyen Van A', 'A@fpt.edu.vn', 1990
+GO
+EXEC ThemQuanLy 'QL02', 'Nguyen Van B', 'B@fpt.edu.vn', 1991
+GO
+EXEC ThemQuanLy 'QL03', 'Nguyen Van C', 'C@fpt.edu.vn', 1992
+GO
+-- Them nghe si
+CREATE PROC ThemNgheSi
+    @MaNgheSi varchar(50),
+    @MaQuanLy varchar(50),
+    @TenNgheSi varchar(50),
+    @Luong float,
+    @SoDienThoai varchar(50)
+AS
+    BEGIN
+        INSERT INTO NgheSi
+        VALUES (@MaNgheSi, @MaQuanLy, @TenNgheSi, @Luong, @SoDienThoai)
+    END
+GO
+EXEC ThemNgheSi 'NS01', 'QL01', 'A', 8, '123'
+EXEC ThemNgheSi 'NS02', 'QL02', 'B', 9, '456'
+EXEC ThemNgheSi 'NS03', 'QL03', 'C', 10, '789'
+GO
+-- Cau 3
+CREATE VIEW VNgheSi
+AS
+    SELECT ns.TenNgheSi, ql.TenQuanLy, ns.Luong, ns.SoDienThoai 
+    FROM NgheSi ns
+    JOIN QuanLy ql ON ns.MaQuanLy = ql.MaQuanLy
+GO
+SELECT * FROM VNgheSi
+GO
+-- Cau 4
+CREATE VIEW VLuongCaoNhat
+AS
+    SELECT TOP 2 *
+    FROM NgheSi
+    ORDER BY Luong DESC
+GO
+SELECT * FROM VLuongCaoNhat
+GO
+-- Cau 5
+CREATE FUNCTION fnTimNgheSi(@sdt varchar(50))
+    RETURNS varchar(50)
+AS
+BEGIN
+    DECLARE @ten varchar(50)
+    SET @ten = (SELECT TenNgheSi FROM NgheSi WHERE SoDienThoai = @sdt)
+    RETURN @ten
+END
+GO
+SELECT dbo.fnTimNgheSi('789');
+GO
+-- Cau 6
+CREATE PROC XoaQuanLy
+    @MaQuanLy varchar(50)
+AS
+BEGIN
+    DELETE FROM NgheSi WHERE MaQuanLy = @MaQuanLy
+    DELETE FROM QuanLy WHERE MaQuanLy = @MaQuanLy
+END
+GO
+EXEC XoaQuanLy 'QL01';
+SELECT * FROM QuanLy;
+SELECT * FROM NgheSi;
