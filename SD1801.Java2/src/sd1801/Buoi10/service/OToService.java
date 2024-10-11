@@ -4,6 +4,11 @@
  */
 package sd1801.Buoi10.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import sd1801.Buoi10.model.OTo;
 
@@ -52,5 +57,48 @@ public class OToService {
         danhSach.sort((o1, o2) -> {
             return o1.getTen().compareTo(o2.getTen());
         });
+    }
+    
+    public void ghiFile() {
+        File file = new File("data.txt");
+        try {
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+            try(FileOutputStream fos = new FileOutputStream(file);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos)){
+                for(OTo oto: danhSach) {
+                    oos.writeObject(oto);
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void docFile() {
+//        File file = new File("data.txt");
+//        
+//        try {
+//            if(!file.exists()) {
+//                System.out.println("Khong tim thay file");
+//            }
+//            try(FileInputStream fis = new FileInputStream(file);
+//                    ObjectInputStream ois = new ObjectInputStream(fis)){
+//                while(fis.available() > 0) {
+//                    
+//                    }
+//                }
+//                danhSach.sort((o1,o2) -> {
+//                    return Integer.valueOf(o1.getId()).compareTo(o2.getId());
+//                });
+//            }
+//        } catch(Exception e) {
+//            e.printStackTrace();
+//        }
+    }
+    
+    public void xoaTatCa() {
+        danhSach.clear();
     }
 }

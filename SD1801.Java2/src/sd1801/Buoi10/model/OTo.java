@@ -4,11 +4,13 @@
  */
 package sd1801.Buoi10.model;
 
+import java.io.Serializable;
+
 /**
  *
  * @author syn
  */
-public class OTo {
+public class OTo implements Serializable {
     private int id;
     private String ten;
     private String hang;
