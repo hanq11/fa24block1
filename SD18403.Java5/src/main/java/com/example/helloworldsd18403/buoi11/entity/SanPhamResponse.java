@@ -12,25 +12,16 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "san_pham")
-public class SanPham {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+public class SanPhamResponse {
     private Integer id;
 
-    @Column(name = "ten")
     private String ten;
 
-    @Column(name = "gia")
     private Float gia;
 
-    @Column(name = "ngay_tao")
     private LocalDate ngayTao;
 
-    @ManyToOne
-    @JoinColumn(name = "id_danh_muc", referencedColumnName = "id")
-    private DanhMuc danhMuc;
+    private Integer idDanhMuc;
 
+    private String tenDanhMuc;
 }
