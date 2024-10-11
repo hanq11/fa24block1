@@ -9,6 +9,11 @@
     <title>Document</title>
 </head>
 <body>
+    <h2>Tim kiem</h2>
+    <form action="/buoi11/san-pham/tim-kiem" method="get">
+        Ten: <input type="text" name="ten"> <br>
+        <button>Submit</button>
+    </form>
     <h2>Them san pham</h2>
     <form action="/buoi11/san-pham/them" method="post">
         Ten: <input type="text" name="ten"> <br>
@@ -19,6 +24,7 @@
                 <option value="${danhMuc.id}" label="${danhMuc.ten}"></option>
             </c:forEach>
         </select> <br>
+<%--        <button onClick="return confirm('test')">Submit</button>--%>
         <button>Submit</button>
     </form>
     <h2>Danh sach</h2>
@@ -34,7 +40,7 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach items="${listSanPham}" var="sanPham">
+            <c:forEach items="${page.content}" var="sanPham">
                 <tr>
                     <td>${sanPham.id}</td>
                     <td>${sanPham.ten}</td>
@@ -49,5 +55,9 @@
             </c:forEach>
         </tbody>
     </table>
+    <a href="/buoi11/san-pham/hien-thi">First</a>
+    <a href="/buoi11/san-pham/hien-thi?p=${page.first ? 0 : page.number - 1}">Prev</a>
+    <a href="/buoi11/san-pham/hien-thi?p=${page.last ? page.totalPages - 1 : page.number + 1}">Next</a>
+    <a href="/buoi11/san-pham/hien-thi?p=${page.totalPages - 1}">Last</a>
 </body>
 </html>
