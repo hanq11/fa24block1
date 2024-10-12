@@ -1,0 +1,116 @@
+CREATE DATABASE DeMau1SD1807;
+USE DeMau1SD1807;
+-------------------------------- Cau 1
+CREATE TABLE GiangVien(
+    MaGiangVien varchar(50) PRIMARY KEY,
+    TenGiangVien varchar(200) NOT NULL,
+    BoMon varchar(50),
+    Email varchar(50),
+    NamSinh int NOT NULL
+)
+
+CREATE TABLE HoiDongDATN(
+    MaHoiDong varchar(50) PRIMARY KEY,
+    TenHoiDong varchar(50) NOT NULL,
+    ChuyenNganh varchar(50) NOT NULL,
+    HocKy int
+)
+
+CREATE TABLE DanhSachHoiDong(
+    MaGiangVien varchar(50),
+    MaHoiDong varchar(50),
+    VaiTro varchar(50) NOT NULL,
+    GhiChu varchar(50),
+    FOREIGN KEY(MaGiangVien) REFERENCES GiangVien(MaGiangVien),
+    FOREIGN KEY(MaHoiDong) REFERENCES HoiDongDATN(MaHoiDong),
+    PRIMARY KEY(MaGiangVien, MaHoiDong)
+)
+GO
+-------------------------------- Cau 2
+CREATE PROC ThemGiangVien
+    @MaGiangVien varchar(50),
+    @TenGiangVien varchar(200),
+    @BoMon varchar(50),
+    @Email varchar(50),
+    @NamSinh int 
+AS
+BEGIN
+    INSERT INTO GiangVien
+    VALUES(@MaGiangVien, @TenGiangVien, @BoMon, @Email, @NamSinh)
+END
+GO
+EXEC ThemGiangVien 'GV01', 'A', 'BM1', 'a@gmail.com', 2000
+EXEC ThemGiangVien 'GV02', 'B', 'BM2', 'b@gmail.com', 2001
+EXEC ThemGiangVien 'GV03', 'C', 'BMC', 'c@gmail.com', 2002
+GO
+----------------------
+CREATE PROC ThemHoiDongDATN
+    @MaHoiDong varchar(50),
+    @TenHoiDong varchar(50),
+    @ChuyenNganh varchar(50),
+    @HocKy int
+AS
+BEGIN
+    INSERT INTO HoiDongDATN
+    VALUES(@MaHoiDong, @TenHoiDong, @ChuyenNganh, @HocKy)
+END
+GO
+EXEC ThemHoiDongDATN 'HD01', 'HDA', 'CNA', '1'
+EXEC ThemHoiDongDATN 'HD02', 'HDB', 'CNB', '2'
+EXEC ThemHoiDongDATN 'HD03', 'HDC', 'CNC', '3'
+GO
+SELECT * FROM HoiDongDATN
+GO
+----------------------
+CREATE PROC ThemDanhSachHoiDong
+    @MaGiangVien varchar(50),
+    @MaHoiDong varchar(50),
+    @VaiTro varchar(50),
+    @GhiChu varchar(50)
+AS
+BEGIN
+    INSERT INTO DanhSachHoiDong
+    VALUES(@MaGiangVien, @MaHoiDong, @VaiTro, @GhiChu)
+END
+GO
+EXEC ThemDanhSachHoiDong 'GV01', 'HD01', 'Chu tich', 'Khong'
+EXEC ThemDanhSachHoiDong 'GV02', 'HD01', 'Thu ky', 'Khong'
+EXEC ThemDanhSachHoiDong 'GV03', 'HD02', 'Uy vien', 'Khong'
+SELECT * FROM DanhSachHoiDong;
+GO
+---------------------- Cau 3
+CREATE VIEW V_GiangVien
+AS
+    SELECT MaGiangVien, TenGiangVien, BoMon, YEAR(GETDATE()) - NamSinh AS 'Tuoi' FROM GiangVien
+GO
+SELECT * FROM V_GiangVien
+GO
+---------------------- Cau 4
+CREATE VIEW V_TopChamThi
+AS
+    SELECT TOP 2 dshd.MaGiangVien, gv.TenGiangVien, COUNT(*) AS 'So lan tham gia'
+    FROM DanhSachHoiDong dshd
+    INNER JOIN GiangVien gv ON dshd.MaGiangVien = gv.MaGiangVien
+    GROUP BY dshd.MaGiangVien, gv.TenGiangVien
+    ORDER BY 'So lan tham gia' DESC
+GO
+SELECT * FROM V_TopChamThi
+---------------- Cau 5
+SELECT CHARINDEX('@', 'haha@gmail.com')
+SELECT SUBSTRING('haha@gmail.com', 1, 5)
+SELECT SUBSTRING('haha@gmail.com', 2, 5)
+SELECT SUBSTRING('haha@gmail.com', 1, CHARINDEX('@', 'haha@gmail.com') - 1)
+GO
+
+CREATE FUNCTION fnGetTen(@email varchar(200))
+RETURNS varchar(50)
+AS
+BEGIN
+    RETURN (SELECT SUBSTRING(@email, 1, CHARINDEX('@', @email) - 1))
+END
+GO
+
+SELECT dbo.fnGetTen('haha@gmail.com')
+SELECT gv.TenGiangVien, gv.email, dbo.fnGetTen(gv.Email)
+FROM GiangVien gv
+GO
